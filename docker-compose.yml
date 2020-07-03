@@ -1,0 +1,41 @@
+version: '3'
+services:
+  
+  authentication-server:
+     image: authentication-server-app
+     build: ./AuthenticationService
+     ports:
+        - 8091:8091
+  
+  naming-server:
+     image: naming-server-app
+     build: ./eureka-discovery-server
+     ports:
+        - 8761:8761
+               
+  shareprice:
+     image: shareprice-app
+     build: ./shareprice
+     ports:
+        - 8080:8080
+     depends_on:
+           - naming-server
+           - authentication-server
+     links:
+            - naming-server
+            - authentication-server
+            
+  networth-service:
+     image: networth-service-app
+     build: ./networth
+     ports:
+        - 8081:8081 
+     depends_on:
+           - naming-server
+           - authentication-server
+     links:
+            - naming-server
+            - authentication-server
+            
+        
+        
